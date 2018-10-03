@@ -54,6 +54,13 @@ The WordPress helm chart uses persistent volume claims for both the wordpress in
 
 The application install uses the stable [WordPress Chart](https://github.com/helm/charts/tree/master/stable/wordpress). Additional values used by the install are provided via the custom [values.yaml](values.yaml) file.
 
+# kubectl config
+
+You can manually get the cluster kubeconfig by running....
+
+```
+aws eks update-kubeconfig --name kubepress
+```
 
 # TODO
 
@@ -65,4 +72,4 @@ Improvements and things to add...
 * Use an external RDS DB via the chart settings in [values-external-db.yaml](values-external-db.yaml).
 * Add pod anti-affinity annotations to ensure wordpress pods spread properly across worker nodes.
 * Add resource requests/limits.
-* Add remote state to terraform for travis
+* Add remote state to terraform or save travis artifacts to S3

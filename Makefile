@@ -10,6 +10,7 @@ terraform: setup
 	cd terraform && terraform apply -auto-approve
 
 kubeconfig: terraform
+	mkdir -p $(HOME)/.kube
 	cd terraform && terraform output kubeconfig > $(HOME)/.kube/config
 	@echo ============================================
 	cat $(HOME)/.kube/config
@@ -58,4 +59,5 @@ clean: wordpress-clean tiller-clean storage-clean
 
 destroy:
 	cd terraform && terraform destroy
+	aws iam delete-instance-profile --instance-profile-name=terraform-eks-kubepress
 	rm -f terraform/config-map-aws-auth.yaml
