@@ -10,7 +10,10 @@ terraform: setup
 	cd terraform && terraform apply -auto-approve
 
 kubeconfig: terraform
-	aws eks update-kubeconfig --name kubepress
+	cd terraform && terraform output kubeconfig > $(HOME)/.kube/config
+	@echo ============================================
+	cat $(HOME)/.kube/config
+	@echo ============================================
 
 config-map-aws-auth.yaml: kubeconfig
 	cd terraform && terraform output config_map_aws_auth > config-map-aws-auth.yaml

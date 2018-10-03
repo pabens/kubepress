@@ -59,7 +59,10 @@ The application install uses the stable [WordPress Chart](https://github.com/hel
 
 Improvements and things to add...
 
-* The `terraform destroy` fails when there is an active kubernetes-managed load balancer still active in the VPC.
+* The `terraform destroy` fails when there is a kubernetes-managed load balancer still active in the VPC. The orphaned ELB must then be manually removed.
 * Replace the load balancer with an ingress controller, cert-manager and external-dns.
 * Add an [Ark](https://github.com/heptio/ark) service to the cluster to provide backup of the service and its persistent disks.
 * Use an external RDS DB via the chart settings in [values-external-db.yaml](values-external-db.yaml).
+* Add pod anti-affinity annotations to ensure wordpress pods spread properly across worker nodes.
+* Add resource requests/limits.
+* Add remote state to terraform for travis
