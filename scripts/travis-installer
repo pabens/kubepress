@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+# travis installer script. download/install required things...
+
+# utility functions
+die (){ echo "ERROR: $@"; exit 1;}
+warn (){ echo "WARN: $@";}
+info (){ echo "INFO: $@";}
+
+set -e
+
+# versions
+kubectlVersion='v1.10.8'
+terraformVersion='0.11.8'
+
+# install terraform
+installTerraform () {
+  if command -v terraform &>/dev/null; then
+    warn "[${FUNCNAME}] Found existing terraform install"
+  else
+    info "[${FUNCNAME}] Installing terraform [${terraformVersion}]"
+    wget https://releases.hashicorp.com/terraform/${terraformVersion}/terraform_${terraformVersion}_linux_amd64.zip -O /tmp/terraform.zip
+    sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
+  fi
+  terraform --version
+}
+
+# install kubectl
+installKubectl () {
+  if command -v kubectl &>/dev/null; then
+    warn "[${FUNCNAME}] Found existing kubectl install"
+  else
+    info "[${FUNCNAME}] Installing kubectl [${kubectlVersion}]"
+    curl -s -O https://storage.googleapis.com/kubernetes-release/release/${kubectlVersion}/bin/linux/amd64/kubectl || die "[${FUNCNAME}] couldnt get kubectl"
+    chmod +x kubectl || die "[${FUNCNAME}] couldnt chmod kubectl"
+    sudo mv kubectl /bin/kubectl || die "[${FUNCNAME}] couldnt install kubectl. got sudo?" # TODO: install to ~/bin and remove sudo requirement
+  fi
+  info "[${FUNCNAME}] kubectl client version [$(kubectl version --short --client=true 2>&1)]"
+}
+
+# install latest aws-cli
+installAwscli () {
+  if command -v aws &>/dev/null; then
+    warn "[${FUNCNAME}] Found existing aws-cli install"
+  else
+    info "[${FUNCNAME}] Installing aws-cli [latest]"
+    curl -s "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" || die "[${FUNCNAME}] couldnt get aws-cli"
+    unzip -q awscli-bundle.zip || die "[${FUNCNAME}] couldnt unzip awscli-bundle"
+    sudo ./awscli-bundle/install -b /bin/aws &>/dev/null || die "[${FUNCNAME}] couldnt install aws-cli. got sudo?" # TODO: install to ~/bin and remove sudo requirement
+  fi
+  info "[${FUNCNAME}] aws cli version [$(aws --version 2>&1)]"
+}
+
+installHelm () {
+  if command -v helm &>/dev/null; then
+    warn "[${FUNCNAME}] Found existing helm install"
+  else
+    info "[${FUNCNAME}] Installing helm"
+    curl -s https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+    info "[${FUNCNAME}] Done"
+  fi
+  helm version --client
+}
+
+installIamAuth () {
+  # https://docs.aws.amazon.com/eks/latest/userguide/configure-kubectl.html
+  mkdir -p $HOME/bin/
+  curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/darwin/amd64/aws-iam-authenticator
+  chmod +x ./aws-iam-authenticator
+  mv ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator
+  echo 'export PATH=$HOME/bin:$PATH' >> ~/.bash_profile
+}
+
+if [[ "${CI}" == true ]]; then
+  # terraform
+  installTerraform
+
+  # aws cli
+  installAwscli
+
+  # kubectl
+  installKubectl
+
+  # aws-iam-authenticator for kubectl
+  installIamAuth
+
+  # helm
+  installHelm
+
+  # done
+  info "requirements installed"
+else
+  warn "who are you and what have you done with Travis?"
+fi
+
+exit 0

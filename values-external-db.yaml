@@ -1,0 +1,7 @@
+replicaCount: 2
+mariadb:
+  enabled: false
+externalDatabase:
+  host: some.rds.hostname.aws.com
+  user: some-username
+  password: some-secret-password

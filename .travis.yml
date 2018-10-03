@@ -1,0 +1,6 @@
+sudo: required
+language: bash
+before_install:
+  - scripts/travis-installer
+script:
+  - make kubepress

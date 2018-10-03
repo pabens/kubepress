@@ -1,0 +1,10 @@
+*~
+.DS_store
+pb*
+*.swp
+.terraform
+*.tfstate
+*.tfstate.backup
+*.lock.info
+config-map-aws-auth.yaml
+tmpcharts
