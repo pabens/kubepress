@@ -59,5 +59,5 @@ clean: wordpress-clean tiller-clean storage-clean
 
 destroy:
 	cd terraform && terraform destroy
-	aws iam delete-instance-profile --instance-profile-name=terraform-eks-kubepress
+	-aws iam delete-instance-profile --instance-profile-name=terraform-eks-kubepress
 	rm -f terraform/config-map-aws-auth.yaml
