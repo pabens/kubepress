@@ -64,7 +64,7 @@ installHelm () {
 installIamAuth () {
   # https://docs.aws.amazon.com/eks/latest/userguide/configure-kubectl.html
   mkdir -p $HOME/bin/
-  curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/darwin/amd64/aws-iam-authenticator
+  curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
   chmod +x ./aws-iam-authenticator
   mv ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator
   echo 'export PATH=$HOME/bin:$PATH' >> ~/.bash_profile

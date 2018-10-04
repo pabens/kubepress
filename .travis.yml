@@ -4,8 +4,9 @@ before_install:
   - scripts/travis-installer
 script:
   - make kubepress
-after_failure:
-  - cat terraform/terraform.tfstate
-after_success:
-  - cat terraform/terraform.tfstate
-  
+addons:
+  artifacts:
+    s3_region: "eu-west-1"
+    paths:
+      - ./terraform/terraform.tfstate
+      - $HOME/.kube/config
