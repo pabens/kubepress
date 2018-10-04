@@ -13,10 +13,12 @@ Wordpress on AWS Demo
 
 The following must be installed on your local machine...
 
-* aws-cli
-* aws account credentials
-* kubectl
-* helm
+* [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-install-macos.html)
+* [aws account credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html)
+* [terraform](https://www.terraform.io/intro/getting-started/install.html)
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-homebrew-on-macos)
+* [aws-iam-authenticator](https://docs.aws.amazon.com/eks/latest/userguide/configure-kubectl.html)
+* [helm](https://docs.helm.sh/using_helm/#installing-helm)
 
 These will be installed by [the installer script](scripts/travis-installer) if running on [travis](.travis.yaml).
 
